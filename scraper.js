@@ -56,6 +56,7 @@ request(url, function (error, response, body) {
 
             var found = false;
             for(var i = 0; i < info.length; i++) {
+                console.log(info[i]);
                 if (info[i].drawDate == drawDate) {
                     found = true;
                     break;
