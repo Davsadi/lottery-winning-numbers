@@ -16,11 +16,43 @@ request(url, function (error, response, body) {
         });
         winningNumsArray.join(', ');
 
-        console.log("It’s " + dateTrimmed[0]);
-        console.log("database-ready date: " + new Date(dateTrimmed[0]));
-        console.log("All winning Numbers: " + winningNumsArray);
-        console.log("Bonus Number is: " + winningNumsArray.pop()); // removes last array item and returns it (to store as the bonus number)
-        console.log("The rest of the numbers are: " + winningNumsArray);
+        var drawDate = new Date(dateTrimmed[0]);
+        var bonusNumber = winningNumsArray.pop();
+
+
+        //console.log("It’s " + dateTrimmed[0]);
+        //console.log("database-ready date: " + new Date(dateTrimmed[0]));
+        //console.log("All winning Numbers: " + winningNumsArray);
+        //console.log("Bonus Number is: " + winningNumsArray.pop()); // removes last array item and returns it (to store as the bonus number)
+        //console.log("The rest of the numbers are: " + winningNumsArray);
+
+
+        var options = {
+            "url": "",
+            "method": "POST",
+            "json": true,
+            "auth": {
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs"
+            },
+            body: {
+                "gameType": "SuperLotto Plus",
+                "drawDate": drawDate,
+                "standardNumbers": winningNumsArray,
+                "bonusNumber": bonusNumber
+            }
+        };
+
+        function callback(error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var info = JSON.parse(body);
+          }
+        }
+
+
+        request(options, callback);
+
+
+
 
   } else {
         console.log("We’ve encountered an error: " + error);
