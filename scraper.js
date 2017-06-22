@@ -28,6 +28,13 @@ request(url, function (error, response, body) {
 
 
         var options = {
+            "url": "https://apps.dferguson.com/api/lottery/v1/lottery/",
+            "method": "GET",
+            "json": true
+        }
+
+
+    /*    options = {
             "url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
             "method": "POST",
             "json": true,
@@ -40,12 +47,12 @@ request(url, function (error, response, body) {
                 "standardNumbers": winningNumsArray,
                 "bonusNumber": bonusNumber
             }
-        };
+        }; */
 
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
             var info = body;
-            console.log("New Lottery Result Added!");
+            console.log(info);
           }
         }
 
