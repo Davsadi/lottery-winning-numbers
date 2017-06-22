@@ -21,7 +21,7 @@ request(url, function (error, response, body) {
 
 
         //console.log("It’s " + dateTrimmed[0]);
-        console.log("database-ready date: " + drawDate));
+        console.log("database-ready date: " + drawDate);
         //console.log("All winning Numbers: " + winningNumsArray);
         console.log("Bonus Number is: " + bonusNumber);
         console.log("The rest of the numbers are: " + winningNumsArray);
