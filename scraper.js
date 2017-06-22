@@ -17,14 +17,14 @@ request(url, function (error, response, body) {
         winningNumsArray.join(', ');
 
         var drawDate = new Date(dateTrimmed[0]);
-        var bonusNumber = winningNumsArray.pop();
+        var bonusNumber = winningNumsArray.pop(); // removes last array item and returns it (to store as the bonus number)
 
 
         //console.log("It’s " + dateTrimmed[0]);
-        //console.log("database-ready date: " + new Date(dateTrimmed[0]));
+        console.log("database-ready date: " + drawDate));
         //console.log("All winning Numbers: " + winningNumsArray);
-        //console.log("Bonus Number is: " + winningNumsArray.pop()); // removes last array item and returns it (to store as the bonus number)
-        //console.log("The rest of the numbers are: " + winningNumsArray);
+        console.log("Bonus Number is: " + bonusNumber);
+        console.log("The rest of the numbers are: " + winningNumsArray);
 
 
         var options = {
