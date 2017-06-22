@@ -45,6 +45,7 @@ request(url, function (error, response, body) {
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
             var info = body;
+            console.log("New Lottery Result Added!");
           }
         }
 
