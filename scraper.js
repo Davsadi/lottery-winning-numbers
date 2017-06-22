@@ -44,7 +44,7 @@ request(url, function (error, response, body) {
 
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
-            var info = JSON.parse(body);
+            var info = body;
           }
         }
 
