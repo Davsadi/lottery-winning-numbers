@@ -16,15 +16,15 @@ request(url, function (error, response, body) {
         });
         winningNumsArray.join(', ');
 
-        var drawDate = new Date(dateTrimmed[0]);
+        var theDrawDate = new Date(dateTrimmed[0]).toISOString().split('T')[0];
         var bonusNumber = winningNumsArray.pop(); // removes last array item and returns it (to store as the bonus number)
 
 
         //console.log("It’s " + dateTrimmed[0]);
-        console.log("database-ready date: " + drawDate);
+        //console.log("database-ready date: " + theDrawDate);
         //console.log("All winning Numbers: " + winningNumsArray);
-        console.log("Bonus Number is: " + bonusNumber);
-        console.log("The rest of the numbers are: " + winningNumsArray);
+        //console.log("Bonus Number is: " + bonusNumber);
+        //console.log("The rest of the numbers are: " + winningNumsArray);
 
 
         var options = {
@@ -34,43 +34,53 @@ request(url, function (error, response, body) {
         }
 
 
-    /*    options = {
-            "url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
-            "method": "POST",
-            "json": true,
-            "auth": {
-                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs"
-            },
-            body: {
-                "gameType": "SuperLotto Plus",
-                "drawDate": drawDate,
-                "standardNumbers": winningNumsArray,
-                "bonusNumber": bonusNumber
-            }
-        }; */
 
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
             var info = body;
-            console.log(info);
-
+            //console.log(info);
             var found = false;
             for(var i = 0; i < info.length; i++) {
-                console.log(info[i]);
-                if (info[i].drawDate == drawDate) {
+                //console.log(info[i]);
+                apiDate = new Date(info[i].drawDate).toISOString().split('T')[0];
+                //console.log("apiDate = " + apiDate + " " + theDrawDate);
+                if (apiDate == theDrawDate) {
                     found = true;
                     break;
                 }
             }
-            console.log(found);
+            if (found == false) {
+                var optionsPost = {
+                        "url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
+                        "method": "POST",
+                        "json": true,
+                        "auth": {
+                            "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs"
+                        },
+                        body: {
+                            "gameType": "SuperLotto Plus",
+                            "drawDate": theDrawDate,
+                            "standardNumbers": winningNumsArray,
+                            "bonusNumber": bonusNumber
+                        }
+                    };
+
+                    function callbackPost(error, response, body) {
+                      if (!error && response.statusCode == 200) {
+                        var info = body;
+                        console.log(info);
+                        }
+                    }
+                    request(optionsPost, callbackPost);
+
+            }
+            else {
+                console.log("This draw has already been added!");
+            }
           }
         }
 
-
         request(options, callback);
-
-
-
 
   } else {
         console.log("We’ve encountered an error: " + error);
