@@ -28,7 +28,7 @@ request(url, function (error, response, body) {
 
 
         var options = {
-            "url": "",
+            "url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
             "method": "POST",
             "json": true,
             "auth": {
