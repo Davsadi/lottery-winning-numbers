@@ -52,7 +52,12 @@ request(url, function (error, response, body) {
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
             var info = body;
-            console.log(info);
+            //console.log(info);
+            for(var i = 0; i < info.length; i++) {
+                var obj = info[i];
+
+                console.log(obj.id);
+            }
           }
         }
 
