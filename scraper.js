@@ -77,7 +77,7 @@ request(url, function (error, response, body) {
                 function callbackPost(error, response, body) {
                   if (!error && response.statusCode == 200) {
                     var info = body;
-                    console.log(info);
+                    //console.log(info);
                     newLottery = info;
                     }
                 }
@@ -104,6 +104,8 @@ request(url, function (error, response, body) {
                             if (apiMyNumbersDate == theDrawDate) {
                                 //match = true;
                                 console.log(newLottery);
+                                console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
+                                
                                 var optionsMyNumbersPut = {
                                     "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
                                     "method": "PUT",
