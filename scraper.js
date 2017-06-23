@@ -76,7 +76,7 @@ request(url, function (error, response, body) {
 
                 function callbackPost(error, response, body) {
                   if (!error && response.statusCode == 200) {
-                      newLottery = body;
+                      newLottery = body._id;
                     }
                 }
 
@@ -93,7 +93,7 @@ request(url, function (error, response, body) {
                 function callbackMyNumbersGet(error, response, body) {
                     if (!error && response.statusCode == 200) {
                         var infoMyNumbers = body;
-                        
+
                         for(var i = 0; i < infoMyNumbers.length; i++) {
                             //console.log(info[i]);
                             apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
@@ -115,7 +115,7 @@ request(url, function (error, response, body) {
                                         "drawDate": infoMyNumbers[i].drawDate,
                                         "standardNumbers": infoMyNumbers[i].standardNumbers,
                                         "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                        "lottery": newLottery._id
+                                        "lottery": newLottery
                                     }
                                 };
 
