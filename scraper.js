@@ -113,7 +113,7 @@ request(url, function (error, response, body) {
                                               "drawDate": infoMyNumbers[i].drawDate,
                                               "standardNumbers": infoMyNumbers[i].standardNumbers,
                                               "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                              "lottery": newLottery._id
+                                              "lottery": newLottery
                                           }
                                       };
 
