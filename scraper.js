@@ -1,8 +1,8 @@
 var request = require("request");
 var cheerio = require("cheerio");
 var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
-var sUrl = "http://localhost:3006";
-//var sUrl = "https://apps.dferguson.com";
+//var sUrl = "http://localhost:3006";
+var sUrl = "https://apps.dferguson.com";
 
 
 
