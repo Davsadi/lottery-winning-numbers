@@ -78,7 +78,7 @@ request(url, function (error, response, body) {
                   if (!error && response.statusCode == 200) {
                       var info = body;
                       newLottery = info;
-                      console.log(newLottery);
+                      //console.log(newLottery);
 
                       //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
                       var optionsMyNumbersGet = {
@@ -98,8 +98,8 @@ request(url, function (error, response, body) {
                                   //console.log("apiDate = " + apiDate + " " + theDrawDate);
                                   if (apiMyNumbersDate == theDrawDate) {
                                       //match = true;
-                                      console.log(newLottery);
-                                      console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
+                                      //console.log(newLottery);
+                                      //console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
 
                                       var optionsMyNumbersPut = {
                                           "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
@@ -124,6 +124,9 @@ request(url, function (error, response, body) {
                                           var info = body;
                                           console.log(info);
                                           }
+                                         else {
+                                             console.log(error);
+                                         }
                                       }
                                       request(optionsMyNumbersPut, callbackMyNumbersPut);
                                   }
@@ -135,7 +138,7 @@ request(url, function (error, response, body) {
                     }
                 }
                 request(optionsPost, callbackPost);
-                
+
             }
             else {
                 console.log("This draw has already been added!");
