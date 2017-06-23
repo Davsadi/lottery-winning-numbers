@@ -1,9 +1,13 @@
 var request = require("request");
 var cheerio = require("cheerio");
 var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
+var sUrl = "http://localhost:3006";
+//var sUrl = "https://apps.dferguson.com";
+
+
 
 request(url, function (error, response, body) {
-  if (!error) {
+  if (!error) { //GRAB THE LATEST WINNING NUMBERS
         var $ = cheerio.load(body);
         var theDate = $("[class='column grid-6 header'] .date").html();
         var dateTrimmed = theDate.split("|", 1);
@@ -28,13 +32,13 @@ request(url, function (error, response, body) {
 
 
         var options = {
-            "url": "https://apps.dferguson.com/api/lottery/v1/lottery/",
+            //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/",
+            "url": sUrl + "/api/lottery/v1/lottery/",
             "method": "GET",
             "json": true
         }
 
-
-
+        //CHECK IF THIS DRAW'S WININIG NUMBERS HAVE ALREADY BEEN ADDED
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
             var info = body;
@@ -49,29 +53,57 @@ request(url, function (error, response, body) {
                     break;
                 }
             }
-            if (found == false) {
+            if (found == false) {   //IF NOT ALREADY ADDED, THEN ADD
                 var optionsPost = {
-                        "url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
-                        "method": "POST",
-                        "json": true,
-                        "auth": {
-                            "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs"
-                        },
-                        body: {
-                            "gameType": "SuperLotto Plus",
-                            "drawDate": theDrawDate,
-                            "standardNumbers": winningNumsArray,
-                            "bonusNumber": bonusNumber
-                        }
-                    };
-
-                    function callbackPost(error, response, body) {
-                      if (!error && response.statusCode == 200) {
-                        var info = body;
-                        console.log(info);
-                        }
+                    //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
+                    "url": sUrl + "/api/lottery/v1/lottery/add",
+                    "method": "POST",
+                    "json": true,
+                    "auth": {
+                        "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs"
+                    },
+                    body: {
+                        "gameType": "SuperLotto Plus",
+                        "drawDate": theDrawDate,
+                        "standardNumbers": winningNumsArray,
+                        "bonusNumber": bonusNumber
                     }
-                    request(optionsPost, callbackPost);
+                };
+
+                function callbackPost(error, response, body) {
+                  if (!error && response.statusCode == 200) {
+                    var info = body;
+                    console.log(info);
+                    }
+                }
+                request(optionsPost, callbackPost);
+
+                //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
+                var optionsMyNumbersGet = {
+                    //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/mynumbers",
+                    "url": sUrl + "/api/lottery/v1/lottery/mynumbers",
+                    "method": "GET",
+                    "json": true
+                }
+                function callbackMyNumbersGet(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        var infoMyNumbers = body;
+                        //console.log(info);
+                        var match = false;
+                        for(var i = 0; i < infoMyNumbers.length; i++) {
+                            //console.log(info[i]);
+                            apiMyNumbersDate = new Date(info[i].drawDate).toISOString().split('T')[0];
+                            //console.log("apiDate = " + apiDate + " " + theDrawDate);
+                            if (apiMyNumbersDate == theDrawDate) {
+                                match = true;
+                                break;
+                            }
+                        }
+                        console.log(match);
+                    }
+                }
+
+                request(optionsMyNumbersGet, callbackMyNumbersGet);
 
             }
             else {
@@ -83,6 +115,6 @@ request(url, function (error, response, body) {
         request(options, callback);
 
   } else {
-        console.log("We’ve encountered an error: " + error);
+      console.log("We’ve encountered an error: " + error);
   }
 });
