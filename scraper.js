@@ -79,62 +79,63 @@ request(url, function (error, response, body) {
                       var info = body;
                       newLottery = info;
                       console.log(newLottery);
+
+                      //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
+                      var optionsMyNumbersGet = {
+                          //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/mynumbers",
+                          "url": sUrl + "/api/lottery/v1/lottery/mynumbers",
+                          "method": "GET",
+                          "json": true
+                      }
+
+                      function callbackMyNumbersGet(error, response, body) {
+                          if (!error && response.statusCode == 200) {
+                              var infoMyNumbers = body;
+
+                              for(var i = 0; i < infoMyNumbers.length; i++) {
+                                  //console.log(info[i]);
+                                  apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
+                                  //console.log("apiDate = " + apiDate + " " + theDrawDate);
+                                  if (apiMyNumbersDate == theDrawDate) {
+                                      //match = true;
+                                      console.log(newLottery);
+                                      console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
+
+                                      var optionsMyNumbersPut = {
+                                          "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
+                                          "method": "PUT",
+                                          "json": true,
+                                          "auth": {
+                                              "bearer": sBearer
+                                          },
+                                          body: {
+                                              "gameType": infoMyNumbers[i].gameType,
+                                              "drawDate": infoMyNumbers[i].drawDate,
+                                              "standardNumbers": infoMyNumbers[i].standardNumbers,
+                                              "bonusNumber": infoMyNumbers[i].bonusNumber,
+                                              "lottery": newLottery
+                                          }
+                                      };
+
+
+
+                                      function callbackMyNumbersPut(error, response, body) {
+                                        if (!error && response.statusCode == 200) {
+                                          var info = body;
+                                          console.log(info);
+                                          }
+                                      }
+                                      request(optionsMyNumbersPut, callbackMyNumbersPut);
+                                  }
+                              }
+                              //console.log(match);
+                          }
+                      }
+
                     }
                 }
-
 
                 request(optionsPost, callbackPost);
-
-                //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
-                var optionsMyNumbersGet = {
-                    //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/mynumbers",
-                    "url": sUrl + "/api/lottery/v1/lottery/mynumbers",
-                    "method": "GET",
-                    "json": true
-                }
-                function callbackMyNumbersGet(error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        var infoMyNumbers = body;
-
-                        for(var i = 0; i < infoMyNumbers.length; i++) {
-                            //console.log(info[i]);
-                            apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
-                            //console.log("apiDate = " + apiDate + " " + theDrawDate);
-                            if (apiMyNumbersDate == theDrawDate) {
-                                //match = true;
-                                console.log(newLottery);
-                                console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
-
-                                var optionsMyNumbersPut = {
-                                    "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
-                                    "method": "PUT",
-                                    "json": true,
-                                    "auth": {
-                                        "bearer": sBearer
-                                    },
-                                    body: {
-                                        "gameType": infoMyNumbers[i].gameType,
-                                        "drawDate": infoMyNumbers[i].drawDate,
-                                        "standardNumbers": infoMyNumbers[i].standardNumbers,
-                                        "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                        "lottery": newLottery
-                                    }
-                                };
-
-
-
-                                function callbackMyNumbersPut(error, response, body) {
-                                  if (!error && response.statusCode == 200) {
-                                    var info = body;
-                                    console.log(info);
-                                    }
-                                }
-                                request(optionsMyNumbersPut, callbackMyNumbersPut);
-                            }
-                        }
-                        //console.log(match);
-                    }
-                }
 
                 request(optionsMyNumbersGet, callbackMyNumbersGet);
 
