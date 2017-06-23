@@ -1,3 +1,4 @@
+var mongoose = require("mongoose");
 var request = require("request");
 var cheerio = require("cheerio");
 var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
@@ -77,7 +78,7 @@ request(url, function (error, response, body) {
                   if (!error && response.statusCode == 200) {
                     var info = body;
                     //console.log(info);
-                    newLottery = info;
+                    newLottery = mongoose.Types.ObjectId(info);
                     }
                 }
 
@@ -102,7 +103,7 @@ request(url, function (error, response, body) {
                             //console.log("apiDate = " + apiDate + " " + theDrawDate);
                             if (apiMyNumbersDate == theDrawDate) {
                                 //match = true;
-                                console.log(newLottery.id);
+                                console.log(newLottery);
                                 var optionsMyNumbersPut = {
                                     //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
                                     "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i],
@@ -116,7 +117,7 @@ request(url, function (error, response, body) {
                                         "drawDate": infoMyNumbers[i].drawDate,
                                         "standardNumbers": infoMyNumbers[i].standardNumbers,
                                         "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                        "lottery": newLottery.id
+                                        "lottery": newLottery
                                     }
                                 };
 
