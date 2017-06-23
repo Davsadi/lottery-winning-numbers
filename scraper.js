@@ -77,7 +77,7 @@ request(url, function (error, response, body) {
                 function callbackPost(error, response, body) {
                   if (!error && response.statusCode == 200) {
                     var info = body;
-                    //console.log(info);
+                    console.log(info);
                     newLottery = info;
                     }
                 }
