@@ -105,8 +105,7 @@ request(url, function (error, response, body) {
                                 //match = true;
                                 console.log(newLottery);
                                 var optionsMyNumbersPut = {
-                                    //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
-                                    "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i],
+                                    "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
                                     "method": "PUT",
                                     "json": true,
                                     "auth": {
@@ -117,7 +116,7 @@ request(url, function (error, response, body) {
                                         "drawDate": infoMyNumbers[i].drawDate,
                                         "standardNumbers": infoMyNumbers[i].standardNumbers,
                                         "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                        "lottery": newLottery
+                                        "lottery": newLottery._id
                                     }
                                 };
 
