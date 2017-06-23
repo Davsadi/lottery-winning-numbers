@@ -102,6 +102,7 @@ request(url, function (error, response, body) {
                             //console.log("apiDate = " + apiDate + " " + theDrawDate);
                             if (apiMyNumbersDate == theDrawDate) {
                                 //match = true;
+                                console.log(newLottery);
                                 var optionsMyNumbersPut = {
                                     //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
                                     "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i],
