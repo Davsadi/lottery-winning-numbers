@@ -125,7 +125,7 @@ request(url, function (error, response, body) {
                                           console.log(info);
                                           }
                                          else {
-                                             console.log(error);
+                                             console.log("error");
                                          }
                                       }
                                       request(optionsMyNumbersPut, callbackMyNumbersPut);
