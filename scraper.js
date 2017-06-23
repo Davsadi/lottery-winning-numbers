@@ -78,7 +78,7 @@ request(url, function (error, response, body) {
                   if (!error && response.statusCode == 200) {
                     var info = body;
                     //console.log(info);
-                    newLottery = mongoose.Types.ObjectId(info);
+                    newLottery = info;
                     }
                 }
 
