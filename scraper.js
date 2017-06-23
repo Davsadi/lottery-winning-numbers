@@ -6,7 +6,10 @@ var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
 var sUrl = "https://apps.dferguson.com";
 var sBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs";
 var newLottery;
-
+var arrayCompare = require("array-extended");
+var bonusMatched = false;
+//var myNumbersId = [];
+var myNumbersId;
 
 request(url, function (error, response, body) {
   if (!error) { //GRAB THE LATEST WINNING NUMBERS
@@ -18,7 +21,7 @@ request(url, function (error, response, body) {
         dateTrimmed[0] = dateTrimmed[0].trim();
 
         $('[class="winning_number_sm"]').children('li').each(function(i, elem) {
-            winningNumsArray[i] = $(this).text();
+            winningNumsArray[i] = parseInt($(this).text(), 10);
         });
         winningNumsArray.join(', ');
 
@@ -93,13 +96,53 @@ request(url, function (error, response, body) {
                               var infoMyNumbers = body;
 
                               for(var i = 0; i < infoMyNumbers.length; i++) {
-                                  //console.log(info[i]);
+                                  //myNumbersId.push(infoMyNumbers[i]._id);
+                                  myNumbersId = infoMyNumbers[i]._id;
+                                  //console.log(infoMyNumbers[i]);
                                   apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
                                   //console.log("apiDate = " + apiDate + " " + theDrawDate);
                                   if (apiMyNumbersDate == theDrawDate) {
                                       //match = true;
                                       //console.log(newLottery);
                                       //console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
+
+                                      //TIE MY NUMBERS TO THE LOTTERY DRAW
+                                      var optionsLotteryPut = {
+                                          "url": sUrl + "/api/lottery/v1/lottery/" + newLottery,
+                                          "method": "PUT",
+                                          "json": true,
+                                          "auth": {
+                                              "bearer": sBearer
+                                          },
+                                          body: {
+                                              "gameType": "SuperLotto Plus",
+                                              "drawDate": theDrawDate,
+                                              "standardNumbers": winningNumsArray,
+                                              "bonusNumber": bonusNumber,
+                                              "myNumbers": myNumbersId
+                                          }
+                                      };
+
+                                      function callbackLotteryPut(error, response, body) {
+                                          if (!error && response.statusCode == 200) {
+                                                var info = body;
+                                                console.log(info);
+                                            }
+                                      }
+                                      console.log(myNumbersId);
+                                      request(optionsLotteryPut, callbackLotteryPut);
+
+
+
+                                      //NOW CHECK FOR MATCHING NUMBERS
+                                      MyNumbers = infoMyNumbers[i].standardNumbers;
+                                      if (infoMyNumbers[i].bonusNumber == bonusNumber) {
+                                          bonusMatched = true;
+                                      } else {
+                                          bonusMatched = false;
+                                      }
+
+                                      //console.log(bonusMatched);
 
                                       var optionsMyNumbersPut = {
                                           "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
@@ -113,22 +156,56 @@ request(url, function (error, response, body) {
                                               "drawDate": infoMyNumbers[i].drawDate,
                                               "standardNumbers": infoMyNumbers[i].standardNumbers,
                                               "bonusNumber": infoMyNumbers[i].bonusNumber,
+                                              "matchedNumbers": arrayCompare.intersect(MyNumbers, winningNumsArray),
+                                              "matchedBonus": bonusMatched,
+                                              "checkedYet": true,
                                               "lottery": newLottery
                                           }
                                       };
 
-                                      console.log(optionsMyNumbersPut);
+                                      //console.log(optionsMyNumbersPut);
 
                                       function callbackMyNumbersPut(error, response, body) {
                                         if (!error && response.statusCode == 200) {
-                                          var info = body;
-                                          console.log(info);
+                                              var info = body;
+                                              console.log(info);
+//console.log(infoMyNumbers[i]);
+//console.log(infoMyNumbers[i]._id);
+                            /*                  var optionsLotteryPut = {
+                                                  "url": sUrl + "/api/lottery/v1/lottery/" + newLottery,
+                                                  "method": "PUT",
+                                                  "json": true,
+                                                  "auth": {
+                                                      "bearer": sBearer
+                                                  },
+                                                  body: {
+                                                      "gameType": "SuperLotto Plus",
+                                                      "drawDate": theDrawDate,
+                                                      "standardNumbers": winningNumsArray,
+                                                      "bonusNumber": bonusNumber,
+                                                      "myNumbers": myNumbersId
+                                                  }
+                                              };
+
+                                              function callbackLotteryPut(error, response, body) {
+                                                  if (!error && response.statusCode == 200) {
+                                                        var info = body;
+                                                        console.log(info);
+                                                    }
+                                              }
+                                              console.log(myNumbersId);
+                                              request(optionsLotteryPut, callbackLotteryPut);  */
                                           }
                                       }
+
                                       request(optionsMyNumbersPut, callbackMyNumbersPut);
                                   }
                               }
                               //console.log(match);
+
+
+
+
                           }
                       }
                       request(optionsMyNumbersGet, callbackMyNumbersGet);
