@@ -92,7 +92,7 @@ request(url, function (error, response, body) {
                         var match = false;
                         for(var i = 0; i < infoMyNumbers.length; i++) {
                             //console.log(info[i]);
-                            apiMyNumbersDate = new Date(info[i].drawDate).toISOString().split('T')[0];
+                            apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
                             //console.log("apiDate = " + apiDate + " " + theDrawDate);
                             if (apiMyNumbersDate == theDrawDate) {
                                 match = true;
