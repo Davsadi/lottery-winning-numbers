@@ -3,6 +3,7 @@ var cheerio = require("cheerio");
 var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
 //var sUrl = "http://localhost:3006";
 var sUrl = "https://apps.dferguson.com";
+var sBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs";
 
 
 
@@ -60,7 +61,7 @@ request(url, function (error, response, body) {
                     "method": "POST",
                     "json": true,
                     "auth": {
-                        "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs"
+                        "bearer": sBearer
                     },
                     body: {
                         "gameType": "SuperLotto Plus",
@@ -70,12 +71,17 @@ request(url, function (error, response, body) {
                     }
                 };
 
+
+
                 function callbackPost(error, response, body) {
                   if (!error && response.statusCode == 200) {
                     var info = body;
-                    console.log(info);
+                    //console.log(info);
+                    newLottery = info;
                     }
                 }
+
+                var newLottery = "";
                 request(optionsPost, callbackPost);
 
                 //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
@@ -89,17 +95,42 @@ request(url, function (error, response, body) {
                     if (!error && response.statusCode == 200) {
                         var infoMyNumbers = body;
                         //console.log(info);
-                        var match = false;
+                        //var match = false;
                         for(var i = 0; i < infoMyNumbers.length; i++) {
                             //console.log(info[i]);
                             apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
                             //console.log("apiDate = " + apiDate + " " + theDrawDate);
                             if (apiMyNumbersDate == theDrawDate) {
-                                match = true;
-                                break;
+                                //match = true;
+                                var optionsMyNumbersPut = {
+                                    //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
+                                    "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i],
+                                    "method": "PUT",
+                                    "json": true,
+                                    "auth": {
+                                        "bearer": sBearer
+                                    },
+                                    body: {
+                                        "gameType": infoMyNumbers[i].gameType,
+                                        "drawDate": infoMyNumbers[i].drawDate,
+                                        "standardNumbers": infoMyNumbers[i].standardNumbers,
+                                        "bonusNumber": infoMyNumbers[i].bonusNumber,
+                                        "matchedNumbers": infoMyNumbers[i].matchedNumbers
+                                    }
+                                };
+
+
+
+                                function callbackMyNumbersPut(error, response, body) {
+                                  if (!error && response.statusCode == 200) {
+                                    var info = body;
+                                    console.log(info);
+                                    }
+                                }
+                                request(optionsMyNumbersPut, callbackMyNumbersPut);
                             }
                         }
-                        console.log(match);
+                        //console.log(match);
                     }
                 }
 
