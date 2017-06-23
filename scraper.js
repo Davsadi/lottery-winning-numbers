@@ -102,7 +102,7 @@ request(url, function (error, response, body) {
                             //console.log("apiDate = " + apiDate + " " + theDrawDate);
                             if (apiMyNumbersDate == theDrawDate) {
                                 //match = true;
-                                console.log(newLottery);
+                                console.log(newLottery.id);
                                 var optionsMyNumbersPut = {
                                     //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
                                     "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i],
@@ -116,7 +116,7 @@ request(url, function (error, response, body) {
                                         "drawDate": infoMyNumbers[i].drawDate,
                                         "standardNumbers": infoMyNumbers[i].standardNumbers,
                                         "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                        "lottery": newLottery
+                                        "lottery": newLottery.id
                                     }
                                 };
 
