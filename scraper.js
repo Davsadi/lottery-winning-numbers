@@ -131,14 +131,11 @@ request(url, function (error, response, body) {
                               //console.log(match);
                           }
                       }
-
+                      request(optionsMyNumbersGet, callbackMyNumbersGet);
                     }
                 }
-
                 request(optionsPost, callbackPost);
-
-                request(optionsMyNumbersGet, callbackMyNumbersGet);
-
+                
             }
             else {
                 console.log("This draw has already been added!");
