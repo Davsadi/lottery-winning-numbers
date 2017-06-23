@@ -5,7 +5,7 @@ var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
 //var sUrl = "http://localhost:3006";
 var sUrl = "https://apps.dferguson.com";
 var sBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs";
-
+var newLottery;
 
 
 request(url, function (error, response, body) {
@@ -82,7 +82,7 @@ request(url, function (error, response, body) {
                     }
                 }
 
-                var newLottery = "";
+
                 request(optionsPost, callbackPost);
 
                 //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
@@ -105,7 +105,7 @@ request(url, function (error, response, body) {
                                 //match = true;
                                 console.log(newLottery);
                                 console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
-                                
+
                                 var optionsMyNumbersPut = {
                                     "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
                                     "method": "PUT",
