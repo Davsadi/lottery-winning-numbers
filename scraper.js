@@ -8,7 +8,7 @@ var sBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEz
 var newLottery;
 var arrayCompare = require("array-extended");
 var bonusMatched = false;
-//var myNumbersId = [];
+var matchedNumbers;
 var myNumbersId;
 
 request(url, function (error, response, body) {
@@ -27,17 +27,7 @@ request(url, function (error, response, body) {
 
         var theDrawDate = new Date(dateTrimmed[0]).toISOString().split('T')[0];
         var bonusNumber = winningNumsArray.pop(); // removes last array item and returns it (to store as the bonus number)
-
-
-        //console.log("It’s " + dateTrimmed[0]);
-        //console.log("database-ready date: " + theDrawDate);
-        //console.log("All winning Numbers: " + winningNumsArray);
-        //console.log("Bonus Number is: " + bonusNumber);
-        //console.log("The rest of the numbers are: " + winningNumsArray);
-
-
         var options = {
-            //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/",
             "url": sUrl + "/api/lottery/v1/lottery/",
             "method": "GET",
             "json": true
@@ -47,12 +37,9 @@ request(url, function (error, response, body) {
         function callback(error, response, body) {
           if (!error && response.statusCode == 200) {
             var info = body;
-            //console.log(info);
             var found = false;
             for(var i = 0; i < info.length; i++) {
-                //console.log(info[i]);
                 apiDate = new Date(info[i].drawDate).toISOString().split('T')[0];
-                //console.log("apiDate = " + apiDate + " " + theDrawDate);
                 if (apiDate == theDrawDate) {
                     found = true;
                     break;
@@ -60,7 +47,6 @@ request(url, function (error, response, body) {
             }
             if (found == false) {   //IF NOT ALREADY ADDED, THEN ADD
                 var optionsPost = {
-                    //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/add",
                     "url": sUrl + "/api/lottery/v1/lottery/add",
                     "method": "POST",
                     "json": true,
@@ -81,11 +67,10 @@ request(url, function (error, response, body) {
                   if (!error && response.statusCode == 200) {
                       var info = body;
                       newLottery = info;
-                      //console.log(newLottery);
+
 
                       //COMPARE WINNING NUMBERS AGAINST MY NUMBERS FOR THIS DRAW
                       var optionsMyNumbersGet = {
-                          //"url": "https://apps.dferguson.com/api/lottery/v1/lottery/mynumbers",
                           "url": sUrl + "/api/lottery/v1/lottery/mynumbers",
                           "method": "GET",
                           "json": true
@@ -96,15 +81,12 @@ request(url, function (error, response, body) {
                               var infoMyNumbers = body;
 
                               for(var i = 0; i < infoMyNumbers.length; i++) {
-                                  //myNumbersId.push(infoMyNumbers[i]._id);
+                                  matchedNumbers = [];
                                   myNumbersId = infoMyNumbers[i]._id;
-                                  //console.log(infoMyNumbers[i]);
                                   apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
-                                  //console.log("apiDate = " + apiDate + " " + theDrawDate);
+
                                   if (apiMyNumbersDate == theDrawDate) {
-                                      //match = true;
-                                      //console.log(newLottery);
-                                      //console.log(sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id);
+
 
                                       //TIE MY NUMBERS TO THE LOTTERY DRAW
                                       var optionsLotteryPut = {
@@ -129,7 +111,7 @@ request(url, function (error, response, body) {
                                                 console.log(info);
                                             }
                                       }
-                                      console.log(myNumbersId);
+
                                       request(optionsLotteryPut, callbackLotteryPut);
 
 
@@ -142,7 +124,13 @@ request(url, function (error, response, body) {
                                           bonusMatched = false;
                                       }
 
-                                      //console.log(bonusMatched);
+
+                                      matchedNumbers = arrayCompare.intersect(MyNumbers, winningNumsArray);
+                                        if (matchedNumbers.length > 0){
+                                            sMatchedNumbers = "'matchedNumbers':" + matchedNumbers;
+                                        } else {
+                                            sMatchedNumbers = "'matchedNumbers':" + infoMyNumbers[i].matchedNumbers;
+                                        }
 
                                       var optionsMyNumbersPut = {
                                           "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
@@ -156,56 +144,24 @@ request(url, function (error, response, body) {
                                               "drawDate": infoMyNumbers[i].drawDate,
                                               "standardNumbers": infoMyNumbers[i].standardNumbers,
                                               "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                              "matchedNumbers": arrayCompare.intersect(MyNumbers, winningNumsArray),
+                                              sMatchedNumbers,
                                               "matchedBonus": bonusMatched,
                                               "checkedYet": true,
                                               "lottery": newLottery
                                           }
                                       };
 
-                                      //console.log(optionsMyNumbersPut);
 
                                       function callbackMyNumbersPut(error, response, body) {
                                         if (!error && response.statusCode == 200) {
                                               var info = body;
                                               console.log(info);
-//console.log(infoMyNumbers[i]);
-//console.log(infoMyNumbers[i]._id);
-                            /*                  var optionsLotteryPut = {
-                                                  "url": sUrl + "/api/lottery/v1/lottery/" + newLottery,
-                                                  "method": "PUT",
-                                                  "json": true,
-                                                  "auth": {
-                                                      "bearer": sBearer
-                                                  },
-                                                  body: {
-                                                      "gameType": "SuperLotto Plus",
-                                                      "drawDate": theDrawDate,
-                                                      "standardNumbers": winningNumsArray,
-                                                      "bonusNumber": bonusNumber,
-                                                      "myNumbers": myNumbersId
-                                                  }
-                                              };
-
-                                              function callbackLotteryPut(error, response, body) {
-                                                  if (!error && response.statusCode == 200) {
-                                                        var info = body;
-                                                        console.log(info);
-                                                    }
-                                              }
-                                              console.log(myNumbersId);
-                                              request(optionsLotteryPut, callbackLotteryPut);  */
                                           }
                                       }
 
                                       request(optionsMyNumbersPut, callbackMyNumbersPut);
                                   }
                               }
-                              //console.log(match);
-
-
-
-
                           }
                       }
                       request(optionsMyNumbersGet, callbackMyNumbersGet);
