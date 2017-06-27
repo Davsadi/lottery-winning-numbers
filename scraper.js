@@ -15,9 +15,9 @@ var myNumbersId;
 
 
 var rule = new schedule.RecurrenceRule();
-rule.dayOfWeek = [1,3,6];
-rule.hour = 21;
-rule.minute = 50;
+rule.dayOfWeek = [3,6]; // Wed, Sat
+rule.hour = 20; //8pm
+rule.minute = 30; //so 8:30pm
 
 var recurringJob = schedule.scheduleJob(rule, function(){
 
