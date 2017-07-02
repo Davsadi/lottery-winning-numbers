@@ -17,7 +17,7 @@ var myNumbersId;
 var rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [3,6]; // Wed, Sat
 rule.hour = 20; //8pm
-rule.minute = 30; //so 8:30pm
+rule.minute = 45; //so 8:45pm
 
 var recurringJob = schedule.scheduleJob(rule, function(){
 
@@ -43,7 +43,7 @@ var recurringJob = schedule.scheduleJob(rule, function(){
                 "json": true
             }
 
-            //CHECK IF THIS DRAW'S WININIG NUMBERS HAVE ALREADY BEEN ADDED
+            //CHECK IF THIS DRAW'S WINNING NUMBERS HAVE ALREADY BEEN ADDED
             function callback(error, response, body) {
               if (!error && response.statusCode == 200) {
                 var info = body;
