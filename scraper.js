@@ -11,6 +11,7 @@ var arrayCompare = require("array-extended");
 var bonusMatched = false;
 var matchedNumbers;
 var myNumbersId;
+var sMatchedNumbers;
 
 
 
@@ -136,10 +137,11 @@ var recurringJob = schedule.scheduleJob(rule, function(){
 
 
                                           matchedNumbers = arrayCompare.intersect(MyNumbers, winningNumsArray);
+
                                             if (matchedNumbers.length > 0){
-                                                sMatchedNumbers = "'matchedNumbers':" + matchedNumbers;
+                                                sMatchedNumbers = matchedNumbers.toString();
                                             } else {
-                                                sMatchedNumbers = "'matchedNumbers':" + infoMyNumbers[i].matchedNumbers;
+                                                sMatchedNumbers = null;
                                             }
 
                                           var optionsMyNumbersPut = {
@@ -154,7 +156,7 @@ var recurringJob = schedule.scheduleJob(rule, function(){
                                                   "drawDate": infoMyNumbers[i].drawDate,
                                                   "standardNumbers": infoMyNumbers[i].standardNumbers,
                                                   "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                                  sMatchedNumbers,
+                                                  "matchedNumbers": sMatchedNumbers,
                                                   "matchedBonus": bonusMatched,
                                                   "checkedYet": true,
                                                   "lottery": newLottery
