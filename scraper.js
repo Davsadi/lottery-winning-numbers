@@ -12,6 +12,7 @@ var bonusMatched = false;
 var matchedNumbers;
 var myNumbersId;
 var sMatchedNumbers;
+var myWinners;
 
 
 
@@ -94,38 +95,10 @@ var recurringJob = schedule.scheduleJob(rule, function(){
                                   for(var i = 0; i < infoMyNumbers.length; i++) {
                                       matchedNumbers = [];
                                       myNumbersId = infoMyNumbers[i]._id;
+                                      myWinners = "";
                                       apiMyNumbersDate = new Date(infoMyNumbers[i].drawDate).toISOString().split('T')[0];
 
                                       if (apiMyNumbersDate == theDrawDate) {
-
-
-                                          //TIE MY NUMBERS TO THE LOTTERY DRAW
-                                          var optionsLotteryPut = {
-                                              "url": sUrl + "/api/lottery/v1/lottery/" + newLottery,
-                                              "method": "PUT",
-                                              "json": true,
-                                              "auth": {
-                                                  "bearer": sBearer
-                                              },
-                                              body: {
-                                                  "gameType": "SuperLotto Plus",
-                                                  "drawDate": theDrawDate,
-                                                  "standardNumbers": winningNumsArray,
-                                                  "bonusNumber": bonusNumber,
-                                                  "myNumbers": myNumbersId
-                                              }
-                                          };
-
-                                          function callbackLotteryPut(error, response, body) {
-                                              if (!error && response.statusCode == 200) {
-                                                    var info = body;
-                                                    console.log(info);
-                                                }
-                                          }
-
-                                          request(optionsLotteryPut, callbackLotteryPut);
-
-
 
                                           //NOW CHECK FOR MATCHING NUMBERS
                                           MyNumbers = infoMyNumbers[i].standardNumbers;
@@ -144,35 +117,74 @@ var recurringJob = schedule.scheduleJob(rule, function(){
                                                 sMatchedNumbers = null;
                                             }
 
-                                          var optionsMyNumbersPut = {
-                                              "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
-                                              "method": "PUT",
-                                              "json": true,
-                                              "auth": {
-                                                  "bearer": sBearer
-                                              },
-                                              body: {
-                                                  "gameType": infoMyNumbers[i].gameType,
-                                                  "drawDate": infoMyNumbers[i].drawDate,
-                                                  "standardNumbers": infoMyNumbers[i].standardNumbers,
-                                                  "bonusNumber": infoMyNumbers[i].bonusNumber,
-                                                  "matchedNumbers": sMatchedNumbers,
-                                                  "matchedBonus": bonusMatched,
-                                                  "checkedYet": true,
-                                                  "lottery": newLottery
-                                              }
-                                          };
+
+                                            if (matchedNumbers.length > 0 && bonusMatched) {
+                                                myWinners = matchedNumbers.length + " + MEGA";
+                                            } else if (matchedNumbers.length > 0) {
+                                                myWinners = matchedNumbers.length
+                                            } else if (bonusMatched) {
+                                                myWinners = "MEGA";
+                                            }
+
+                                            //TIE MY NUMBERS TO THE LOTTERY DRAW
+                                            var optionsLotteryPut = {
+                                                "url": sUrl + "/api/lottery/v1/lottery/" + newLottery,
+                                                "method": "PUT",
+                                                "json": true,
+                                                "auth": {
+                                                    "bearer": sBearer
+                                                },
+                                                body: {
+                                                    "gameType": "SuperLotto Plus",
+                                                    "drawDate": theDrawDate,
+                                                    "standardNumbers": winningNumsArray,
+                                                    "bonusNumber": bonusNumber,
+                                                    "myNumbers": myNumbersId,
+                                                    "myWinners":  myWinners
+                                                }
+                                            };
+
+                                            function callbackLotteryPut(error, response, body) {
+                                                if (!error && response.statusCode == 200) {
+                                                      var info = body;
+                                                      console.log(info);
+                                                  }
+                                            }
+
+                                            request(optionsLotteryPut, callbackLotteryPut);
 
 
-                                          function callbackMyNumbersPut(error, response, body) {
-                                            if (!error && response.statusCode == 200) {
-                                                  var info = body;
-                                                  console.log(info);
+
+
+                                              var optionsMyNumbersPut = {
+                                                  "url": sUrl + "/api/lottery/v1/lottery/mynumbers/" + infoMyNumbers[i]._id,
+                                                  "method": "PUT",
+                                                  "json": true,
+                                                  "auth": {
+                                                      "bearer": sBearer
+                                                  },
+                                                  body: {
+                                                      "gameType": infoMyNumbers[i].gameType,
+                                                      "drawDate": infoMyNumbers[i].drawDate,
+                                                      "standardNumbers": infoMyNumbers[i].standardNumbers,
+                                                      "bonusNumber": infoMyNumbers[i].bonusNumber,
+                                                      "matchedNumbers": sMatchedNumbers,
+                                                      "matchedBonus": bonusMatched,
+                                                      "checkedYet": true,
+                                                      "lottery": newLottery
+                                                  }
+                                              };
+
+
+                                              function callbackMyNumbersPut(error, response, body) {
+                                                if (!error && response.statusCode == 200) {
+                                                      var info = body;
+                                                      console.log(info);
+                                                  }
                                               }
+
+                                              request(optionsMyNumbersPut, callbackMyNumbersPut);
                                           }
-
-                                          request(optionsMyNumbersPut, callbackMyNumbersPut);
-                                      }
                                   }
                               }
                           }
