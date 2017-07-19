@@ -120,7 +120,7 @@ var recurringJob = schedule.scheduleJob(rule, function(){
 
                                             if (matchedNumbers.length > 0 && bonusMatched) {
                                                 myWinners = matchedNumbers.length + " + MEGA";
-                                            } else if (matchedNumbers.length > 0) {
+                                            } else if (matchedNumbers.length > 2) {
                                                 myWinners = matchedNumbers.length
                                             } else if (bonusMatched) {
                                                 myWinners = "MEGA";
