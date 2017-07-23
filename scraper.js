@@ -5,7 +5,7 @@ var schedule = require('node-schedule');
 var url = "http://www.calottery.com/play/draw-games/superlotto-plus";
 //var sUrl = "http://localhost:3006";
 var sUrl = "https://apps.dferguson.com";
-var sBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTQ5ODA4NDAwMSwiZXhwIjoxNTAwNjc2MDAxfQ.beRPMB4vOrSpzLG2MFdNM-usVoUxjdOx6FPPS7ZFcBs";
+var sBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTUwMDc1ODY0MSwiZXhwIjoxNTAzMzUwNjQxfQ.S5kDqS5zt5xuM_EFJpWTXY4Xthiv_Mnr-zDD5_uXln8";
 var newLottery;
 var arrayCompare = require("array-extended");
 var bonusMatched = false;
@@ -19,7 +19,7 @@ var myWinners;
 var rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [3,6]; // Wed, Sat
 rule.hour = 20; //8pm
-rule.minute = 45; //so 8:45pm
+rule.minute = 55; //so 8:45pm
 
 var recurringJob = schedule.scheduleJob(rule, function(){
 
