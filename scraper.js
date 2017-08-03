@@ -19,9 +19,9 @@ var myWinners;
 var rule = new schedule.RecurrenceRule();
 rule.dayOfWeek = [3,6]; // Wed, Sat
 rule.hour = 20; //8pm
-rule.minute = 55; //so 8:45pm
+rule.minute = 30; //so 8:45pm
 
-var recurringJob = schedule.scheduleJob(rule, function(){
+// var recurringJob = schedule.scheduleJob(rule, function(){
 
     request(url, function (error, response, body) {
       if (!error) { //GRAB THE LATEST WINNING NUMBERS
@@ -207,4 +207,4 @@ var recurringJob = schedule.scheduleJob(rule, function(){
       }
     });
 
-});
+// });
