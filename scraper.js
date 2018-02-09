@@ -4,7 +4,7 @@ var cheerio = require('cheerio');
 var schedule = require('node-schedule');
 var url = 'http://www.calottery.com/play/draw-games/superlotto-plus';
 //var sUrl = "http://localhost:3006";
-var sUrl = 'https://apps.dferguson.com';
+var sUrl = 'https://lottery.dferguson.com';
 var sBearer =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTUwMDc1ODY0MSwiZXhwIjoxNTAzMzUwNjQxfQ.S5kDqS5zt5xuM_EFJpWTXY4Xthiv_Mnr-zDD5_uXln8';
 var newLottery;
@@ -16,9 +16,11 @@ var sMatchedNumbers;
 var myWinners;
 
 var rule = new schedule.RecurrenceRule();
-rule.dayOfWeek = [3, 6]; // Wed, Sat
+/* rule.dayOfWeek = [3, 6]; // Wed, Sat
 rule.hour = 20; //8pm
 rule.minute = 30; //so 8:30pm
+*/
+rule.year = 2018; //so run always!
 
 var recurringJob = schedule.scheduleJob(rule, function() {
     request(url, function(error, response, body) {
