@@ -6,7 +6,7 @@ var url = 'http://www.calottery.com/play/draw-games/superlotto-plus';
 //var sUrl = "http://localhost:3006";
 var sUrl = 'https://lottery.dferguson.com';
 var sBearer =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU5NGFmMjk4ZjMzNGEzMmUzOWM1NmE0OCIsImlhdCI6MTUwMDc1ODY0MSwiZXhwIjoxNTAzMzUwNjQxfQ.S5kDqS5zt5xuM_EFJpWTXY4Xthiv_Mnr-zDD5_uXln8';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhN2QzNjQxNmY1NTc4Nzc2NTlhZTFlYyIsImlhdCI6MTUxODE1NTM0MCwiZXhwIjoxNTIwNzQ3MzQwfQ.3vGFzA_rVSz1ajjq7fN9DwLreNWLvORrG7kO2Mg8F5Q';
 var newLottery;
 var arrayCompare = require('array-extended');
 var bonusMatched = false;
