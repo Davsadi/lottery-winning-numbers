@@ -6,7 +6,7 @@ var url = 'http://www.calottery.com/play/draw-games/superlotto-plus';
 //var sUrl = "http://localhost:3006";
 var sUrl = 'https://lottery.dferguson.com';
 var sBearer =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhN2QzNjQxNmY1NTc4Nzc2NTlhZTFlYyIsImlhdCI6MTUxODE1NTM0MCwiZXhwIjoxNTIwNzQ3MzQwfQ.3vGFzA_rVSz1ajjq7fN9DwLreNWLvORrG7kO2Mg8F5Q';
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVhN2QzNjQxNmY1NTc4Nzc2NTlhZTFlYyIsImlhdCI6MTUxODE1NTM0MCwiZXhwIjoxNTIwNzQ3MzQwfQ.3vGFzA_rVSz1ajjq7fN9DwLreNWLvORrG7kO2Mg8F5Q//';
 var newLottery;
 var arrayCompare = require('array-extended');
 var bonusMatched = false;
@@ -16,11 +16,11 @@ var sMatchedNumbers;
 var myWinners;
 
 var rule = new schedule.RecurrenceRule();
-/* rule.dayOfWeek = [3, 6]; // Wed, Sat
+rule.dayOfWeek = [3, 6]; // Wed, Sat
 rule.hour = 20; //8pm
 rule.minute = 30; //so 8:30pm
-*/
-rule.year = 2018; //so run always!
+
+//rule.year = 2018; //so run always!
 
 var recurringJob = schedule.scheduleJob(rule, function() {
     request(url, function(error, response, body) {
