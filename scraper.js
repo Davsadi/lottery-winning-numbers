@@ -16,11 +16,11 @@ var sMatchedNumbers;
 var myWinners;
 
 var rule = new schedule.RecurrenceRule();
-rule.dayOfWeek = [3, 6]; // Wed, Sat
-rule.hour = 20; //8pm
-rule.minute = 30; //so 8:30pm
+// rule.dayOfWeek = [3, 6]; // Wed, Sat
+// rule.hour = 20; //8pm
+// rule.minute = 30; //so 8:30pm
 
-//rule.year = 2018; //so run always!
+rule.year = 2018; //so run always!
 
 var recurringJob = schedule.scheduleJob(rule, function() {
     request(url, function(error, response, body) {
